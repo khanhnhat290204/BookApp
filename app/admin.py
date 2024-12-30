@@ -31,12 +31,15 @@ class CategoryView(AdminView):
 
 
 class AuthorView(AdminView):
-    column_list = ['name', 'book']
+    column_list = ['name', 'books']
 
 class BookView(AdminView):
     column_list = ['name', 'category', 'author', 'price', 'publisher']
     form_columns = ['name', 'image', 'category', 'author', 'price', 'publisher', 'quantity']
     column_editable_list = ['quantity']
+
+class PublisherView(AdminView):
+    column_list = ['name', 'books']
 
 class AuthenticatedView(BaseView):
     def is_accessible(self):
@@ -63,5 +66,6 @@ admin.add_view(AuthorView(Author, db.session))
 admin.add_view(CategoryView(Category, db.session))
 admin.add_view(BookView(Book, db.session))
 admin.add_view(AdminView(User, db.session))
+admin.add_view(PublisherView(Publisher, db.session))
 admin.add_view(StatsView(name='Thống kê'))
 admin.add_view(LogoutView(name='Đăng xuất'))

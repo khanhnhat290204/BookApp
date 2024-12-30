@@ -28,7 +28,7 @@ def annonymous_storage(f):
     @wraps(f)
     def auth_employee(*args, **kwargs):
 
-        if current_user.user_role==UserRole.STORAGE:
+        if current_user.user_role==UserRole.CUSTOMER or current_user.user_role==UserRole.EMPLOYEE :
             print(current_user.user_role)
             return redirect("/")
         return f(*args, **kwargs)

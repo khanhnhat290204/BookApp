@@ -64,24 +64,32 @@ def add_books_batch():
                 index += 1
                 continue  # Bỏ qua sản phẩm không hợp lệ
 
+            if quantity < 150:
+                errors.append(f'Số lượng nhập tại dòng {index + 1} phải ít nhất là 150')
+                index += 1
+                continue
+
             # Truy vấn hoặc tạo mới Author và Publisher từ cơ sở dữ liệu
             author = Author.query.filter_by(name=author_name).first()
             if not author:
                 author = Author(name=author_name)  # Tạo mới nếu không tìm thấy
                 db.session.add(author)
+                db.session.flush()
 
             publisher = Publisher.query.filter_by(name=publisher_name).first()
             if not publisher:
                 publisher = Publisher(name=publisher_name)  # Tạo mới nếu không tìm thấy
                 db.session.add(publisher)
+                db.session.flush()
 
             # Kiểm tra xem sách đã tồn tại hay chưa (dựa vào tên, tác giả và nhà xuất bản)
             existing_book = Book.query.filter_by(name=name, author_id=author.id, publisher_id=publisher.id).first()
 
             if existing_book:
-                # Nếu sách đã tồn tại, cộng số lượng mới vào số lượng cũ
-                # existing_book.quantity += quantity
-                pass
+                if existing_book.quantity + quantity > 300:
+                    errors.append(f'Tổng số lượng sách tại dòng {index + 1} không được vượt quá 300')
+                    index += 1
+                    continue
             else:
                 # Nếu sách chưa tồn tại, thêm vào danh sách thêm mới
                 books_to_add.append(Book(
@@ -309,7 +317,6 @@ def add_to_bill():
         return jsonify({'status': 500})
     session["bill"]=bill
     print(bill)
-
     return jsonify(utils.stats_cart(cart=bill))
 @app.route('/api/create_bill/<book_id>',methods=['put'])
 def update_bill(book_id):

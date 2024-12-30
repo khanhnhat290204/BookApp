@@ -28,7 +28,7 @@
     <button type="button" id="add-row">Thêm sản phẩm</button>
     <button type="submit">Lưu</button>
 </form>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     let rowIndex = 1;
 
@@ -38,7 +38,7 @@
         const newRow = `
             <tr>
                 <td><input type="text" name="books[${rowIndex}][name]" placeholder="Tên sản phẩm" required></td>
-                <td><input type="number" step="0.01" name="books[${rowIndex}][price]" placeholder="Giá" required></td>
+                <td><input type="number" step="0.01" name="books[${rowIndex}][price]" placeholder="Nhập giá" required></td>
                 <td><input type="text" name="books[${rowIndex}][author]" placeholder="Tên tác giả" required></td>
                 <td><input type="text" name="books[${rowIndex}][publisher]" placeholder="Nhà xuất bản"></td>
                 <td><input type="number" name="books[${rowIndex}][quantity]" placeholder="Số lượng" required></td>
@@ -55,5 +55,17 @@
             e.target.closest('tr').remove();
         }
     });
+
+    // Hiển thị thông báo pop-up nếu có thông báo lỗi hoặc thành công
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        $(document).ready(function() {
+            {% for category, message in messages %}
+                // Hiển thị thông báo lỗi hoặc thành công dưới dạng alert pop-up
+                alert("{{ message }}");
+            {% endfor %}
+        });
+    {% endif %}
+    {% endwith %}
 </script>
 {% endblock %}

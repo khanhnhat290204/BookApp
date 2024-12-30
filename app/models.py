@@ -38,8 +38,8 @@ class Customer(db.Model):
     bills=relationship('Bill',backref='customer',lazy=True)
 
 class Employee(db.Model):
-    id = Column(Integer, ForeignKey(User.id))
-    name = Column(String(50), nullable=False,primary_key=True)
+    id = Column(Integer, ForeignKey(User.id),primary_key=True)
+    name = Column(String(50), nullable=False)
     bills = relationship('Bill', backref='employee', lazy=True)
 
 class Author(db.Model):
@@ -94,10 +94,6 @@ class Bill(db.Model):
     customer_id= Column(Integer, ForeignKey(Customer.id), nullable=False)
     employee_id=Column(Integer, ForeignKey(Employee.id),nullable=False)#lay 1 id default khi khach mua hang online
     createdate= Column(DateTime,default=datetime.now())
-
-class Discount(db.Model):
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    percent = Column(Integer)
 
 class Bill_detail(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -212,7 +208,8 @@ if __name__=='__main__':
         db.session.commit()
 
         e=Employee(id=1,name='admin')
-        c=Customer(id=4,name='Khánh Nhật')
+        e1=Employee(id=u3.id,name='Ngọc Bích')
+        c=Customer(id=u2.id,name='Khánh Nhật')
         c2=Customer(id=2,name='guest')
         db.session.add_all([c,c2])
         db.session.add(e)
